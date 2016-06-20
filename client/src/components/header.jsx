@@ -2,9 +2,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {change_lang} from '../actions/index'
-import base from './base'
 
-class header extends base{
+class header extends React.Component{
   constructor(props) {
     super(props)
     this.state = {

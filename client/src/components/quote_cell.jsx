@@ -1,6 +1,7 @@
 'use strict'
 import React from 'react'
 import { connect } from 'react-redux'
+
 class quote_cell extends React.Component{
   constructor(props) {
     super(props)

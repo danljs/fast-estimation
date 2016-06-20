@@ -2,7 +2,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import QuoteRow from './quote_row'
-import Report from '../util/report.js'
 
 class quote extends React.Component{
   constructor(props) {
@@ -60,7 +59,6 @@ class quote extends React.Component{
             }
             xhr.open('GET', '//localhost:1234/pdf')
             xhr.send()
-            //Report.print(bbb,aaa)
           }}/>
         </div>
         <section className='main'><ul>
