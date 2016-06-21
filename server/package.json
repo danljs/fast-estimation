@@ -1,8 +1,23 @@
 {
   "name": "",
   "version": "",
+  "description": "",
+  "keywords": [
+    "Node.js"
+  ],
+
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+
   "dependencies": {
-    "express": "^4.14.0",
+    "express": "~3.4.4",
     "pdfmake": "^0.1.18"
-  }
+  },
+  "devDependencies": {},
+  "bundleDependencies": [],
+
+  "private": true,
+  "main": "server.js"
 }

@@ -57,7 +57,7 @@ class quote extends React.Component{
               a.click()
               document.body.removeChild(a)
             }
-            xhr.open('GET', '//localhost:1234/pdf')
+            xhr.open('GET', '/pdf')
             xhr.send()
           }}/>
         </div>

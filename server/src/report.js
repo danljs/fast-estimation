@@ -1,10 +1,10 @@
 "use strict"
-let fs = require('fs'),
+var fs = require('fs'),
     pdfMakePrinter = require('pdfmake/src/printer');
 
-module.exports = (() => {
+module.exports = (function () {
 
-  let createPdfBinary = (font_desc, pdfDoc, callback) => {
+  var createPdfBinary = function (font_desc, pdfDoc, callback) {
     var printer = new pdfMakePrinter(font_desc);
     var doc = printer.createPdfKitDocument(pdfDoc);
     var chunks = [];
@@ -20,7 +20,7 @@ module.exports = (() => {
   }
 
   return {
-    create: (data, callback) => {
+    create: function (data, callback) {
       var font_desc = {
         msyh: {
           normal: 'font/msyh.ttf',
