@@ -18,18 +18,31 @@ class quote extends React.Component{
   }
 
   componentDidMount(){
-    let xmlhttp = new XMLHttpRequest()
-    xmlhttp.onreadystatechange = ()=>{
-      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        this.setState({category: JSON.parse(xmlhttp.response).category})
-      }
-    }
-    xmlhttp.open('GET', 'data/data.json', true)
-    xmlhttp.send()
+    // let xmlhttp = new XMLHttpRequest()
+    // xmlhttp.onreadystatechange = ()=>{
+    //   if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+    //     this.setState({category: JSON.parse(xmlhttp.response).category})
+    //   }
+    // }
+    // xmlhttp.open('GET', 'data/data.json', true)
+    // xmlhttp.send()
+    
   }
 
   componentWillReceiveProps(nextProps){
-    !!nextProps.ws.aaa ? alert(nextProps.ws.aaa) : ''
+    console.log(nextProps.ws)
+    if(!this.props.ws.connected && nextProps.ws.connected){
+      this.props.dispatch(post_message({type:'json',data:'print'}))
+      return
+    }
+    switch(nextProps.ws.type){
+      case 'json':
+        this.setState({category: nextProps.ws.data.category})
+        break
+      case 'pdf':
+        break
+      default:
+    }
   }
 
   render() {

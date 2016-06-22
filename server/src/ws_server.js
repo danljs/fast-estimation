@@ -1,14 +1,25 @@
-var WebSocketServer = require('ws').Server
+var WebSocketServer = require('ws').Server,
+    fs      = require('fs'),
+    wss = {}
 
-var wss = {}
 module.exports = function (server) {
   wss = new WebSocketServer({server : server})
   wss.on('connection', function (ws) {
     console.log('A ws client connected.')
     ws.on('message', function (msg) {
       msg = JSON.parse(msg)
-      console.log(msg)
-      send({received : msg, aaa : 'bbb'})
+      switch(msg.type){
+        case 'json':
+          fs.readFile('data/data.json', 'utf8', function (err, data) {
+            if (err) throw err;
+            send({type : msg.type, data : JSON.parse(data)});
+          });
+          break;
+        case 'pdf':
+          send({type : msg.type, received : msg, aaa : 'pdf'})
+          break;
+        default:
+      }
     })
     ws.on('close', function () {console.log('A ws client disconnected.')})
     ws.on('error', function () {console.log(e)})
