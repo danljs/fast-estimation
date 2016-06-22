@@ -2,6 +2,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import QuoteRow from './quote_row'
+import {post_message} from '../actions/index'
 
 class quote extends React.Component{
   constructor(props) {
@@ -27,6 +28,10 @@ class quote extends React.Component{
     xmlhttp.send()
   }
 
+  componentWillReceiveProps(nextProps){
+    !!nextProps.ws.aaa ? alert(nextProps.ws.aaa) : ''
+  }
+
   render() {
     let lang = this.props.lang.keys
     let titles = this.state.category.map((c,i)=>c[lang.item_name])
@@ -46,19 +51,21 @@ class quote extends React.Component{
             //bbb.push({title:lang.quatity,width:70})
             //bbb.push({title:lang.amount,width:70})
 
-            var xhr = new XMLHttpRequest()
-            xhr.responseType = 'blob'
-            xhr.onload = () => {
-              var a = document.createElement('a')
-              a.href = window.URL.createObjectURL(xhr.response)
-              a.download = 'testtest.pdf'
-              a.style.display = 'none'
-              document.body.appendChild(a)
-              a.click()
-              document.body.removeChild(a)
-            }
-            xhr.open('GET', '/pdf')
-            xhr.send()
+            // var xhr = new XMLHttpRequest()
+            // xhr.responseType = 'blob'
+            // xhr.onload = () => {
+            //   var a = document.createElement('a')
+            //   a.href = window.URL.createObjectURL(xhr.response)
+            //   a.download = 'testtest.pdf'
+            //   a.style.display = 'none'
+            //   document.body.appendChild(a)
+            //   a.click()
+            //   document.body.removeChild(a)
+            // }
+            // xhr.open('GET', '/pdf')
+            // xhr.send()
+
+            this.props.dispatch(post_message({type:'print',data:'print'}))
           }}/>
         </div>
         <section className='main'><ul>

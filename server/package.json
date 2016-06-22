@@ -5,19 +5,17 @@
   "keywords": [
     "Node.js"
   ],
-
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
-
   "dependencies": {
     "express": "~3.4.4",
-    "pdfmake": "^0.1.18"
+    "pdfmake": "^0.1.18",
+    "ws": "^1.1.0"
   },
   "devDependencies": {},
   "bundleDependencies": [],
-
   "private": true,
   "main": "server.js"
 }

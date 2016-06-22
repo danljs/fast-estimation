@@ -1,8 +1,10 @@
 #!/bin/env node
 //  OpenShift sample Node application
-var express = require('express');
-var fs      = require('fs');
-var report = require('./src/report');
+var http    = require('http'),
+    express = require('express'),
+    fs      = require('fs'),
+    report = require('./src/report'),
+    wss = require('./src/ws_server');
 
 /**
  *  Define the sample application.
@@ -97,12 +99,7 @@ var SampleApp = function() {
      */
     self.createRoutes = function() {
         self.routes = { };
-
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
-
+        
         self.routes['/'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.cache_get('index.html') );
@@ -129,7 +126,7 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.app = express.createServer();
+        self.app = express();
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
@@ -157,13 +154,17 @@ var SampleApp = function() {
     self.start = function() {
         self.app.use(express.static(__dirname));
 
-        // self.app.use( function (req, res, next) {
-        //     res.header("Access-Control-Allow-Origin", "*")
-        //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-        //     next()
-        // })
+        self.app.use( function (req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*")
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+            next()
+        })
+
+        var server = http.createServer(self.app);
+        wss(server);
+
         //  Start the app on the specific interface (and port).
-        self.app.listen(self.port, self.ipaddress, function() {
+        server.listen(self.port, self.ipaddress, function() {
             console.log('%s: Node server started on %s:%d ...',
                         Date(Date.now() ), self.ipaddress, self.port);
         });
@@ -179,3 +180,30 @@ var SampleApp = function() {
 var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
+
+
+// var express = require('express'),
+//     app = express(),
+//     server = require('http').createServer(app),
+//     fs      = require('fs'),
+//     WebSocketServer = require('ws').Server,
+//     wss = new WebSocketServer({ server: server })
+
+// app.use(express.static(__dirname));
+
+// app.use('/', function (req, res) {
+//   res.setHeader('Content-Type', 'text/html');
+//   res.send(fs.readFileSync('./index.html') );
+// });
+
+// wss.on('connection', function connection(ws) {
+//   ws.on('message', function incoming(message) {
+//     console.log('received: %s', message);
+//     ws.send(JSON.stringify({data:'received!!!'}));
+//   });
+// });
+
+// var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+// var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
+// server.listen(port, ipaddress, function () { console.log('Listening on ' + server.address().port) });

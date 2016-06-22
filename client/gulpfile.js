@@ -9,7 +9,10 @@ let gulp = require('gulp'),
     minify_css = require('gulp-minify-css'),
     plumber = require('gulp-plumber'),
     watch = require('gulp-watch'),
-    del = require('del')
+    del = require('del'),
+    replace = require('gulp-replace'),
+    fs = require('fs'),
+    gulpsync = require('gulp-sync')(gulp)
 
 gulp.task('make', () => {
   gulp.start('js')
@@ -45,7 +48,17 @@ gulp.task('min-css', () => gulp.src('./build/css/app.css')
   .pipe(gulp.dest('./build/css/'))
 )
 
-//=============================================================
+gulp.task('build-in', () =>{
+  gulp.src('build/index.html')
+  .pipe(replace('<link rel="stylesheet" href="css/app.css" type="text/css" media="all" >', () =>
+    '<style>\n' + fs.readFileSync('build/css/app.css', 'utf8') + '\n</style>'
+  ))
+  .pipe(replace('<script src="js/app.js"></script>', () =>
+    '<script>\n' + fs.readFileSync('build/js/app.js', 'utf8') + '\n</script>'
+  ))
+  .pipe(gulp.dest('../production'));
+})
+
 gulp.task('clean', () => del(['../production/**/*'], {force: true}));
 gulp.task('deploy', () => {
   gulp.start('deploy-client')
@@ -58,3 +71,5 @@ gulp.task('deploy-client', () => gulp.src('./build/**/*', {base:'./build/'})
 gulp.task('deploy-server', () => gulp.src('../server/**/*', {base:'../server/'})
   .pipe(gulp.dest('../production/'))
 )
+
+gulp.task('build', gulpsync.sync(['clean', 'js', 'css', 'min-js', 'min-css', 'build-in']))
