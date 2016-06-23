@@ -1,6 +1,7 @@
 var WebSocketServer = require('ws').Server,
     fs      = require('fs'),
-    wss = {}
+    wss = {},
+    report = require('./report')
 
 module.exports = function (server) {
   wss = new WebSocketServer({server : server})
@@ -17,7 +18,24 @@ module.exports = function (server) {
           });
           break;
         case 'print-request':
-          send({type : 'print-response', received : msg, aaa : 'pdfpdfpdf'})
+          report.create(msg.data, function (binary) {
+            send({type : 'print-response', file: binary, aaa : 'pdfpdfpdf'});
+          });
+
+          // var tmp_dir = __dirname + '/tmp';
+          // !!!fs.existsSync(tmp_dir) ? fs.mkdirSync(tmp_dir) : ''
+
+          // report.create(msg.data, function (binary) {
+          //   var file_name = tmp_dir + '/test.pdf'
+          //   fs.writeFile(file_name, binary , function (err) {
+          //     if (err) { return console.log(err)}
+          //     fs.readFile(file_name,function(err1,data){
+          //       if(err1){console.log(err1)}
+          //       send({type : 'print-response', file: binary, aaa : 'pdfpdfpdf'});
+          //     })
+          //   })
+          // }, function (error){res.send('ERROR:' + error)})
+
           break;
         default:
       }

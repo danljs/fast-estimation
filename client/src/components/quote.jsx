@@ -40,10 +40,20 @@ class quote extends React.Component{
         this.setState({category: nextProps.ws.data.category})
         break
       case 'print-response':
+        // var bb = new window.WebKitBlobBuilder();
+        // bb.append(nextProps.ws.file.data); // Note: not xhr.responseText
+
+        // var blob = bb.getBlob('application/pdf');
+        // var blobURL = window.webkitURL.createObjectURL(blob);
+
+        // window.open(blobURL);
+            
         alert(nextProps.ws.aaa)
-        // alert()
+        // var pdfBlob = new Blob([nextProps.ws.file.data],{type: "application/pdf"});
+        // var url = window.URL.createObjectURL(pdfBlob);
+        // // alert()
         // let b = document.createElement('a')
-        // b.href = window.URL.createObjectURL(nextProps.ws.data.report)
+        // b.href = url
         // b.download = 'testtest.pdf'
         // b.style.display = 'none'
         // document.body.appendChild(b)
