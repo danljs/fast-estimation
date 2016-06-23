@@ -78,6 +78,14 @@ var SampleApp = function() {
         self.createRoutes();
         self.app = express();
 
+        self.app.use(express.static(__dirname));
+
+        self.app.use( function (req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*")
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+            next()
+        })
+        
         for (var r in self.routes) {
             self.app.get(r, self.routes[r]);
         }
@@ -91,14 +99,6 @@ var SampleApp = function() {
     };
 
     self.start = function() {
-        self.app.use(express.static(__dirname));
-
-        self.app.use( function (req, res, next) {
-            res.header("Access-Control-Allow-Origin", "*")
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-            next()
-        })
-
         var server = http.createServer(self.app);
         wss(server);
         server.listen(self.port, self.ipaddress, function() {

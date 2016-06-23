@@ -8,15 +8,16 @@ module.exports = function (server) {
     console.log('A ws client connected.')
     ws.on('message', function (msg) {
       msg = JSON.parse(msg)
+      console.log(msg)
       switch(msg.type){
-        case 'json':
+        case 'json-request':
           fs.readFile('data/data.json', 'utf8', function (err, data) {
             if (err) throw err;
-            send({type : msg.type, data : JSON.parse(data)});
+            send({type : 'json-response', data : JSON.parse(data)});
           });
           break;
-        case 'pdf':
-          send({type : msg.type, received : msg, aaa : 'pdf'})
+        case 'print-request':
+          send({type : 'print-response', received : msg, aaa : 'pdfpdfpdf'})
           break;
         default:
       }

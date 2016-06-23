@@ -50,6 +50,9 @@ gulp.task('min-css', () => gulp.src('./build/css/app.css')
 
 gulp.task('build-in', () =>{
   gulp.src('build/index.html')
+  // .pipe(replace('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">', () =>
+  //   '<style>\n' + fs.readFileSync('build/vendor/bootstrap.min.css', 'utf8') + '\n</style>'
+  // ))
   .pipe(replace('<link rel="stylesheet" href="css/app.css" type="text/css" media="all" >', () =>
     '<style>\n' + fs.readFileSync('build/css/app.css', 'utf8') + '\n</style>'
   ))
@@ -68,11 +71,45 @@ gulp.task('deploy-client', () => gulp.src('./build/**/*', {base:'./build/'})
   .pipe(gulp.dest('../production/'))
 )
 
-gulp.task('deploy-server', () => gulp.src('../server/**/*', {base:'../server/'})
+gulp.task('deploy-server', () => gulp.src([
+  '!../server/node_modules',
+  '!../server/node_modules/**',
+  '!../server/tmp',
+  '!../server/tmp/**',
+  '../server/**/*'
+  ], {base:'../server/'})
   .pipe(gulp.dest('../production/'))
 )
 
 //production, development
 gulp.task('env', () => process.env.NODE_ENV = 'production')
 
-gulp.task('build', gulpsync.sync(['env', 'clean', 'js', 'css', 'min-js', 'min-css', 'build-in']))
+gulp.task('build', gulpsync.sync([
+  'env', 
+  'clean', 
+  'js', 
+  'css', 
+  'min-js', 
+  'min-css', 
+  'build-in', 
+  'deploy-server'
+]))
+
+gulp.task('clean-pub', () => del([
+  '../../fast/data/*',
+  '../../fast/font/*',
+  '../../fast/src/*',
+  '../../fast/package.json',
+  '../../fast/server.js',
+  '../../fast/index.html'
+  ], {force: true}))
+
+gulp.task('copy-pub', () => gulp.src('../production/**/*', {base:'../production/'})
+  .pipe(gulp.dest('../../fast/'))
+)
+
+gulp.task('publish', gulpsync.sync([
+  'build', 
+  'clean-pub', 
+  'copy-pub'
+]))

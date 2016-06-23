@@ -32,14 +32,23 @@ class quote extends React.Component{
   componentWillReceiveProps(nextProps){
     console.log(nextProps.ws)
     if(!this.props.ws.connected && nextProps.ws.connected){
-      this.props.dispatch(post_message({type:'json',data:'print'}))
+      this.props.dispatch(post_message({type:'json-request',data:'initial'}))
       return
     }
     switch(nextProps.ws.type){
-      case 'json':
+      case 'json-response':
         this.setState({category: nextProps.ws.data.category})
         break
-      case 'pdf':
+      case 'print-response':
+        alert(nextProps.ws.aaa)
+        // alert()
+        // let b = document.createElement('a')
+        // b.href = window.URL.createObjectURL(nextProps.ws.data.report)
+        // b.download = 'testtest.pdf'
+        // b.style.display = 'none'
+        // document.body.appendChild(b)
+        // b.click()
+        // document.body.removeChild(b)
         break
       default:
     }
@@ -57,28 +66,33 @@ class quote extends React.Component{
             this.setState({items: [...items, {}]})
           }}/>
           <input className='new-todo' placeholder={lang.what}/>
-          <div className='print' onClick={e=>{
+          <button onClick={e=>{
             //var aaa = this.state.items.map(c=>[...c.items.map(e=>e.item_name), c.quatity + '', c.amount])
             //var bbb = []
             //titles.map(c=>bbb.push({title:c,width:70}))
             //bbb.push({title:lang.quatity,width:70})
             //bbb.push({title:lang.amount,width:70})
 
-            // var xhr = new XMLHttpRequest()
-            // xhr.responseType = 'blob'
-            // xhr.onload = () => {
-            //   var a = document.createElement('a')
-            //   a.href = window.URL.createObjectURL(xhr.response)
-            //   a.download = 'testtest.pdf'
-            //   a.style.display = 'none'
-            //   document.body.appendChild(a)
-            //   a.click()
-            //   document.body.removeChild(a)
-            // }
-            // xhr.open('GET', '/pdf')
-            // xhr.send()
+            var xhr = new XMLHttpRequest()
+            xhr.responseType = 'blob'
+            xhr.onload = () => {
+              if (xhr.readyState !== 4 || xhr.status !== 200) return
+              var a = document.createElement('a')
+              a.href = window.URL.createObjectURL(xhr.response)
+              a.download = 'testtest.pdf'
+              a.style.display = 'none'
+              document.body.appendChild(a)
+              a.click()
+              document.body.removeChild(a)
+            }
+            xhr.onerror = (evt) => console.log(evt)
+            xhr.onabort = (evt) => console.log(evt)
 
-            this.props.dispatch(post_message({type:'print',data:'print'}))
+            xhr.open('GET', 'pdf')
+            xhr.send()
+          }}>test</button>
+          <div className='print' onClick={e=>{
+            this.props.dispatch(post_message({type:'print-request',data:'print'}))
           }}/>
         </div>
         <section className='main'><ul>

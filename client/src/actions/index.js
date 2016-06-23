@@ -8,7 +8,7 @@ export const CONNECTING = 'CONNECTING'
 export const CONNECTED =  'CONNECTED'
 export const ERROR =  'ERROR'
 
-export let change_lang = (lang) => {
+export let change_lang = lang => {
     return {type: CHANGE_LANG, lang}
 }
 export let connecting = () => {
