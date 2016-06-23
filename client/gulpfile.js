@@ -72,4 +72,7 @@ gulp.task('deploy-server', () => gulp.src('../server/**/*', {base:'../server/'})
   .pipe(gulp.dest('../production/'))
 )
 
-gulp.task('build', gulpsync.sync(['clean', 'js', 'css', 'min-js', 'min-css', 'build-in']))
+//production, development
+gulp.task('env', () => process.env.NODE_ENV = 'production')
+
+gulp.task('build', gulpsync.sync(['env', 'clean', 'js', 'css', 'min-js', 'min-css', 'build-in']))
