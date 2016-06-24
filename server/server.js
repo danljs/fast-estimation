@@ -5,7 +5,7 @@ var http    = require('http'),
     report = require('./src/report'),
     wss = require('./src/ws_server');
 
-process.env.OPENSHIFT_NODEJS_PORT = 8000;
+// process.env.OPENSHIFT_NODEJS_PORT = 8000;
 
 var SampleApp = function() {
 

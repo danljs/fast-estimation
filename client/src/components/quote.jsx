@@ -30,7 +30,6 @@ class quote extends React.Component{
   }
 
   componentWillReceiveProps(nextProps){
-    console.log(nextProps.ws)
     if(!this.props.ws.connected && nextProps.ws.connected){
       this.props.dispatch(post_message({type:'json-request',data:'initial'}))
       return
@@ -40,25 +39,17 @@ class quote extends React.Component{
         this.setState({category: nextProps.ws.data.category})
         break
       case 'print-response':
-        // var bb = new window.WebKitBlobBuilder();
-        // bb.append(nextProps.ws.file.data); // Note: not xhr.responseText
-
-        // var blob = bb.getBlob('application/pdf');
-        // var blobURL = window.webkitURL.createObjectURL(blob);
-
-        // window.open(blobURL);
-            
-        alert(nextProps.ws.aaa)
-        // var pdfBlob = new Blob([nextProps.ws.file.data],{type: "application/pdf"});
-        // var url = window.URL.createObjectURL(pdfBlob);
-        // // alert()
-        // let b = document.createElement('a')
-        // b.href = url
-        // b.download = 'testtest.pdf'
-        // b.style.display = 'none'
-        // document.body.appendChild(b)
-        // b.click()
-        // document.body.removeChild(b)
+        let url = window.URL.createObjectURL(new Blob([
+          new Uint8Array(nextProps.ws.file.data)
+          ],{type: "application/pdf"}));
+        let b = document.createElement('a')
+        b.href = url
+        b.download = 'testtest.pdf'
+        b.style.display = 'none'
+        document.body.appendChild(b)
+        b.click()
+        document.body.removeChild(b)
+        window.URL.revokeObjectURL(url);
         break
       default:
     }
@@ -82,7 +73,7 @@ class quote extends React.Component{
             //titles.map(c=>bbb.push({title:c,width:70}))
             //bbb.push({title:lang.quatity,width:70})
             //bbb.push({title:lang.amount,width:70})
-
+            
             var xhr = new XMLHttpRequest()
             xhr.responseType = 'blob'
             xhr.onload = () => {
@@ -97,7 +88,7 @@ class quote extends React.Component{
             }
             xhr.onerror = (evt) => console.log(evt)
             xhr.onabort = (evt) => console.log(evt)
-
+            // xhr.open('GET', 'http://localhost:8000/pdf')
             xhr.open('GET', 'pdf')
             xhr.send()
           }}>test</button>
