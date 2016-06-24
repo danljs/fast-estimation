@@ -5,7 +5,7 @@ const http         = require('http'),
       sysInfo      = require('./utils/sys-info'),
       env          = process.env;
 
-let server = http.createServer(function (req, res) {
+let server = http.createServer((req, res) => {
   let url = req.url;
   switch(url){
     case '/health':
@@ -21,10 +21,10 @@ let server = http.createServer(function (req, res) {
     case '/':
       url = 'index.html'
     default:
-      fs.readFile(url, function (err, data) {
+      fs.readFile(url, (err, data) => {
         if (err) {
           res.writeHead(404);
-          res.end('Not foundddd');
+          res.end('Not found');
         } else {
           let ext = path.extname(url).slice(1);
           res.setHeader('Content-Type', contentTypes[ext]);
@@ -37,6 +37,6 @@ let server = http.createServer(function (req, res) {
   }
 });
 
-server.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
+server.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', () => {
   console.log(`Application worker ${process.pid} started...`);
 });
