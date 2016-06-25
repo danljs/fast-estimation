@@ -95,17 +95,19 @@ gulp.task('build', gulpsync.sync([
   'deploy-server'
 ]))
 
+let dest_folder = '../../fast2/'
 gulp.task('clean-pub', () => del([
-  '../../fast/data/*',
-  '../../fast/font/*',
-  '../../fast/src/*',
-  '../../fast/package.json',
-  '../../fast/server.js',
-  '../../fast/index.html'
+  dest_folder + 'data/*',
+  dest_folder + 'font/*',
+  dest_folder + 'src/*',
+  dest_folder + 'utils/*',
+  dest_folder + 'package.json',
+  dest_folder + 'app.js',
+  dest_folder + 'index.html'
   ], {force: true}))
 
 gulp.task('copy-pub', () => gulp.src('../production/**/*', {base:'../production/'})
-  .pipe(gulp.dest('../../fast/'))
+  .pipe(gulp.dest(dest_folder))
 )
 
 gulp.task('publish', gulpsync.sync([

@@ -2,8 +2,8 @@
 let http        = require('http'),
     fs            = require('fs'),
     path          = require('path'),
-    // contentTypes  = require('./utils/content-types'),
-    // sysInfo       = require('./utils/sys-info'),
+    contentTypes  = require('./utils/content-types'),
+    sysInfo       = require('./utils/sys-info'),
     env           = process.env,
     wss           = require('./src/ws_server')
 
@@ -18,7 +18,10 @@ let server = http.createServer((req, res) => {
     case '/info/poll':
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Cache-Control', 'no-cache, no-store');
-      // res.end(JSON.stringify(sysInfo[url.slice(6)]()));
+      res.end(JSON.stringify(sysInfo[url.slice(6)]()));
+      break;
+    case '/pdf':
+      report.create(req.data, binary => res.end(binary), error => res.send('ERROR:' + error))
       break;
     case '/':
       url = 'index.html'
@@ -29,7 +32,7 @@ let server = http.createServer((req, res) => {
           res.end('Not found');
         } else {
           let ext = path.extname(url).slice(1);
-          // res.setHeader('Content-Type', contentTypes[ext]);
+          res.setHeader('Content-Type', contentTypes[ext]);
           if (ext === 'html') {
             res.setHeader('Cache-Control', 'no-cache, no-store');
           }
@@ -41,6 +44,6 @@ let server = http.createServer((req, res) => {
 
 wss(server)
 
-server.listen(env.NODE_PORT || 8000, env.NODE_IP || 'localhost', () => {
+server.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', () => {
   console.log(`Application worker ${process.pid} started...`);
 });
