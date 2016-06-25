@@ -1,38 +1,36 @@
-var WebSocketServer = require('ws').Server,
-    fs      = require('fs'),
-    wss = {},
-    report = require('./report')
+"use strict"
 
-module.exports = function (server) {
-  wss = new WebSocketServer({server : server})
-  wss.on('connection', function (ws) {
+let WSServer  = require('ws').Server,
+    fs        = require('fs'),
+    wss       = {},
+    report    = require('./report')
+
+module.exports = server => {
+  wss = new WSServer({server : server})
+  wss.on('connection', ws => {
     console.log('A ws client connected.')
-    ws.on('message', function (msg) {
+    ws.on('message', msg => {
       msg = JSON.parse(msg)
       console.log(msg)
       switch(msg.type){
         case 'json-request':
-          fs.readFile('data/data.json', 'utf8', function (err, data) {
+          fs.readFile('data/data.json', 'utf8', (err, data) => {
             if (err) throw err;
             send({type : 'json-response', data : JSON.parse(data)});
           });
           break;
         case 'print-request':
-          report.create(msg.data, function (binary) {
-            send({type : 'print-response', file: binary, aaa : 'pdfpdfpdf'});
-          });
+          report.create(msg.data, binary => send({type : 'print-response', file: binary, aaa : 'pdfpdfpdf'}))
           break;
         default:
       }
     })
-    ws.on('close', function () {console.log('A ws client disconnected.')})
-    ws.on('error', function () {console.log(e)})
-    var send = function (msg, cb) {
-      cb = cb || function () {}
-      ws.send(JSON.stringify(msg), function (err) {return ws.readyState === 3 ? cb() : cb(err)})
+    ws.on('close', () => console.log('A ws client disconnected.'))
+    ws.on('error', () => console.log(e))
+    let send = (msg, cb) => {
+      cb = cb || () => {}
+      ws.send(JSON.stringify(msg), err => ws.readyState === 3 ? cb() : cb(err))
     }
-    var broadcast = function (msg) {
-      wss.clients.map(function (c) {c.send(JSON.stringify(msg))})
-    }
+    let broadcast = msg => wss.clients.map( c => c.send(JSON.stringify(msg)))
   }
 )}

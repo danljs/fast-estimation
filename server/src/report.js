@@ -1,26 +1,21 @@
 "use strict"
-var fs = require('fs'),
-    pdfMakePrinter = require('pdfmake/src/printer');
 
-module.exports = (function () {
+let pdfmaker  = require('pdfmake/src/printer')
 
-  var createPdfBinary = function (font_desc, pdfDoc, callback) {
-    var printer = new pdfMakePrinter(font_desc);
-    var doc = printer.createPdfKitDocument(pdfDoc);
-    var chunks = [];
+module.exports = ( () => {
 
-    doc.on('data', function (chunk) {
-      chunks.push(chunk);
-    });
+  var createPdfBinary = (font_desc, pdfDoc, callback) => {
+    var printer = new pdfmaker(font_desc)
+    var doc = printer.createPdfKitDocument(pdfDoc)
+    var chunks = []
 
-    doc.on('end', function () {
-      callback(Buffer.concat(chunks));
-    });
-    doc.end();
+    doc.on('data', chunk => chunks.push(chunk))
+    doc.on('end', () => callback(Buffer.concat(chunks)))
+    doc.end()
   }
 
   return {
-    create: function (data, callback) {
+    create: (data, callback) => {
       var font_desc = {
         msyh: {
           normal: 'font/msyh.ttf',
@@ -69,7 +64,7 @@ module.exports = (function () {
         defaultStyle: {
           font: 'msyh'
         }
-      };
+      }
 
       createPdfBinary(font_desc, doc_def, callback)
     }
