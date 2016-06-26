@@ -21,7 +21,20 @@ let server = http.createServer((req, res) => {
       res.end(JSON.stringify(sysInfo[url.slice(6)]()));
       break;
     case '/pdf':
-      report.create(req.data, binary => res.end(binary), error => res.send('ERROR:' + error))
+      // report.create(req.data, binary => res.end(binary), error => res.send('ERROR:' + error))
+
+      let tmp_dir = __dirname + '/tmp';
+      !!!fs.existsSync(tmp_dir) ? fs.mkdirSync(tmp_dir) : ''
+
+      report.create(req.data, binary => {
+        let file_name = tmp_dir + '/test.pdf'
+        fs.writeFile(file_name, binary , err => {
+          if (err) { return console.log(err)}
+          res.download(file_name)
+        })
+        }, error => res.send('ERROR:' + error)
+      )
+
       break;
     case '/':
       url = 'index.html'
