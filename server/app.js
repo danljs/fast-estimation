@@ -5,9 +5,14 @@ let http        = require('http'),
     contentTypes  = require('./utils/content-types'),
     sysInfo       = require('./utils/sys-info'),
     env           = process.env,
+    report = require('./src/report'),
     wss           = require('./src/ws_server')
 
+env.NODE_PORT = 8000
+
 let server = http.createServer((req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
   let url = req.url;
   switch(url){
     case '/health':
@@ -21,19 +26,19 @@ let server = http.createServer((req, res) => {
       res.end(JSON.stringify(sysInfo[url.slice(6)]()));
       break;
     case '/pdf':
-      // report.create(req.data, binary => res.end(binary), error => res.send('ERROR:' + error))
+      report.create(req.data, binary => res.end(binary), error => res.send('ERROR:' + error))
 
-      let tmp_dir = __dirname + '/tmp';
-      !!!fs.existsSync(tmp_dir) ? fs.mkdirSync(tmp_dir) : ''
+      // let tmp_dir = __dirname + '/tmp';
+      // !!!fs.existsSync(tmp_dir) ? fs.mkdirSync(tmp_dir) : ''
 
-      report.create(req.data, binary => {
-        let file_name = tmp_dir + '/test.pdf'
-        fs.writeFile(file_name, binary , err => {
-          if (err) { return console.log(err)}
-          res.download(file_name)
-        })
-        }, error => res.send('ERROR:' + error)
-      )
+      // report.create(req.data, binary => {
+      //   let file_name = tmp_dir + '/test.pdf'
+      //   fs.writeFile(file_name, binary , err => {
+      //     if (err) { return console.log(err)}
+      //     res.download(file_name)
+      //   })
+      //   }, error => res.send('ERROR:' + error)
+      // )
 
       break;
     case '/':

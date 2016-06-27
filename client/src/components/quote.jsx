@@ -41,7 +41,8 @@ class quote extends React.Component{
       case 'print-response':
         let url = window.URL.createObjectURL(new Blob([
           new Uint8Array(nextProps.ws.file.data)
-          ],{type: "application/pdf"}));
+          ],{type: "application/octet-stream"}));
+
         let b = document.createElement('a')
         b.href = url
         b.download = 'testtest.pdf'
@@ -88,8 +89,8 @@ class quote extends React.Component{
             }
             xhr.onerror = (evt) => console.log(evt)
             xhr.onabort = (evt) => console.log(evt)
-            // xhr.open('GET', 'http://localhost:8000/pdf')
-            xhr.open('GET', 'pdf')
+            xhr.open('GET', 'http://localhost:8000/pdf')
+            // xhr.open('GET', 'pdf')
             xhr.send()
           }}>test</button>
           <div className='print' onClick={e=>{
