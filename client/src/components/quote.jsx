@@ -68,13 +68,8 @@ class quote extends React.Component{
             this.setState({items: [...items, {}]})
           }}/>
           <input className='new-todo' placeholder={lang.what}/>
+          {/*
           <button onClick={e=>{
-            //var aaa = this.state.items.map(c=>[...c.items.map(e=>e.item_name), c.quatity + '', c.amount])
-            //var bbb = []
-            //titles.map(c=>bbb.push({title:c,width:70}))
-            //bbb.push({title:lang.quatity,width:70})
-            //bbb.push({title:lang.amount,width:70})
-            
             var xhr = new XMLHttpRequest()
             xhr.responseType = 'blob'
             xhr.onload = () => {
@@ -89,11 +84,16 @@ class quote extends React.Component{
             }
             xhr.onerror = (evt) => console.log(evt)
             xhr.onabort = (evt) => console.log(evt)
-            xhr.open('GET', 'http://localhost:8000/pdf')
-            // xhr.open('GET', 'pdf')
+            xhr.open('GET', 'pdf')
             xhr.send()
           }}>test</button>
+          */}
           <div className='print' onClick={e=>{
+            //var aaa = this.state.items.map(c=>[...c.items.map(e=>e.item_name), c.quatity + '', c.amount])
+            //var bbb = []
+            //titles.map(c=>bbb.push({title:c,width:70}))
+            //bbb.push({title:lang.quatity,width:70})
+            //bbb.push({title:lang.amount,width:70})
             this.props.dispatch(post_message({type:'print-request',data:'print'}))
           }}/>
         </div>

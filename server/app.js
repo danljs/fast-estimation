@@ -4,11 +4,9 @@ let http        = require('http'),
     path          = require('path'),
     contentTypes  = require('./utils/content-types'),
     sysInfo       = require('./utils/sys-info'),
-    env           = process.env,
     report = require('./src/report'),
     wss           = require('./src/ws_server')
 
-env.NODE_PORT = 8000
 
 let server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*")
@@ -61,7 +59,7 @@ let server = http.createServer((req, res) => {
 });
 
 wss(server)
-
-server.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', () => {
-  console.log(`Application worker ${process.pid} started...`);
+let port = process.env.NODE_PORT || 3000
+server.listen(port, process.env.NODE_IP || 'localhost', () => {
+  console.log(`Application worker ${process.pid} started at ${port}...`);
 });

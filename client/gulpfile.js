@@ -48,25 +48,32 @@ gulp.task('min-css', () => gulp.src('./build/css/app.css')
   .pipe(gulp.dest('./build/css/'))
 )
 
+//=============================================================================
+//build production
+//=============================================================================
+//production, development
+gulp.task('env', () => process.env.NODE_ENV = 'production')
+
+gulp.task('clean', () => del(['../production/**/*'], {force: true}));
+
 gulp.task('build-in', () =>{
   gulp.src('build/index.html')
-  // .pipe(replace('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">', () =>
-  //   '<style>\n' + fs.readFileSync('build/vendor/bootstrap.min.css', 'utf8') + '\n</style>'
-  // ))
   .pipe(replace('<link rel="stylesheet" href="css/app.css" type="text/css" media="all" >', () =>
     '<style>\n' + fs.readFileSync('build/css/app.css', 'utf8') + '\n</style>'
   ))
   .pipe(replace('<script src="js/app.js"></script>', () =>
-    '<script>\n' + fs.readFileSync('build/js/app.js', 'utf8') + '\n</script>'
+    '<script>\n'
+    + fs.readFileSync('build/js/app.js', 'utf8') 
+    + '\n</script>'
   ))
   .pipe(gulp.dest('../production'));
 })
 
-gulp.task('clean', () => del(['../production/**/*'], {force: true}));
 gulp.task('deploy', () => {
   gulp.start('deploy-client')
   gulp.start('deploy-server')
 })
+
 gulp.task('deploy-client', () => gulp.src('./build/**/*', {base:'./build/'})
   .pipe(gulp.dest('../production/'))
 )
@@ -80,9 +87,6 @@ gulp.task('deploy-server', () => gulp.src([
   ], {base:'../server/'})
   .pipe(gulp.dest('../production/'))
 )
-
-//production, development
-gulp.task('env', () => process.env.NODE_ENV = 'production')
 
 gulp.task('build', gulpsync.sync([
   'env', 
