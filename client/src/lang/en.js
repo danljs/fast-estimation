@@ -1,6 +1,8 @@
 //lang.en.js
 module.exports = {
-	english : 'English',
+	id: 'en',
+	change_id : 'ch',
+	name : '中文',
 	chinese : 'Chinese',
 	email : 'Email',
 	password : 'Password',

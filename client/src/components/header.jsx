@@ -6,14 +6,12 @@ import {change_lang} from '../actions/index'
 class header extends React.Component{
   constructor(props) {
     super(props)
-    this.state = {
-      show_lang : false
-    }
   }
   componentWillReceiveProps(nextProps){
+
   }
   render() {
-    var lang = this.props.lang.keys
+    let lang = this.props.lang.keys
     return (
       <div className='header-area'>
       {/*
@@ -27,9 +25,8 @@ class header extends React.Component{
         }}>{lang.quote}</a>
       */}
         <a onClick={e=>{
-          this.setState({show_lang : !this.state.show_lang})
-          this.state.show_lang ? this.props.dispatch(change_lang('en')) : this.props.dispatch(change_lang('ch'))
-        }}>{this.state.show_lang ? lang.english : lang.chinese}</a>
+          this.props.dispatch(change_lang(lang.change_id))
+        }}>{lang.name}</a>
       </div>
     )
   }

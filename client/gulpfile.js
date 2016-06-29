@@ -99,7 +99,7 @@ gulp.task('build', gulpsync.sync([
   'deploy-server'
 ]))
 
-let dest_folder = '../../fast2/'
+let dest_folder = '../../fast1/'
 gulp.task('clean-pub', () => del([
   dest_folder + 'data/*',
   dest_folder + 'font/*',
