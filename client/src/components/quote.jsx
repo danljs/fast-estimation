@@ -2,7 +2,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import QuoteRow from './quote_row'
-import {post_message} from '../actions/index'
+import {post_message, check} from '../actions/index'
 
 class quote extends React.Component{
   constructor(props) {
@@ -94,7 +94,9 @@ class quote extends React.Component{
             //titles.map(c=>bbb.push({title:c,width:70}))
             //bbb.push({title:lang.quatity,width:70})
             //bbb.push({title:lang.amount,width:70})
-            this.props.dispatch(post_message({type:'print-request',data:'print'}))
+            this.props.dispatch(check())
+            debugger
+            // this.props.dispatch(post_message({type:'print-request',data:'print'}))
           }}/>
         </div>
         <section className='main'><ul>

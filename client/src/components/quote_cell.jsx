@@ -8,6 +8,16 @@ class quote_cell extends React.Component{
     this.state = {
     }
   }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.ui.type === 'check'){
+      this.refs.selected.classList.remove('error')
+      if(this.refs.selected.value === ''){
+        this.refs.selected.classList.add('error')
+      }
+    }
+  }
+
   render() {
     var lang = this.props.lang.keys
     var subs = this.props.subs
@@ -15,11 +25,11 @@ class quote_cell extends React.Component{
     //http://jsfiddle.net/chirayu45/yxkut/16/
     
     return (
-      <select defaultValue='select' onChange={e=>{
+      <select ref='selected' defaultValue='' onChange={e=>{
         let value = e.target.value.split(':')
         this.props.change({price : value[0], item_name : value[1]})
       }}>
-        <option value='select' disabled='disabled'>{lang.select}</option>
+        <option value='' disabled='disabled'></option>
         {
           subs.map((c,i)=>
             !!!c.sub ?
@@ -34,4 +44,4 @@ class quote_cell extends React.Component{
     )
   }
 }
-export default connect(state => ({lang: state.lang}))(quote_cell)
+export default connect(state => ({lang: state.lang, ui: state.ui}))(quote_cell)

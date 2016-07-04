@@ -7,6 +7,8 @@ export const POST_MESSAGE = 'POST_MESSAGE'
 export const CONNECTING = 'CONNECTING'
 export const CONNECTED =  'CONNECTED'
 export const ERROR =  'ERROR'
+export const CHECK =  'CHECK'
+export const CHECKTED = 'CHECKTED'
 
 export let change_lang = lang => {
     return {type: CHANGE_LANG, lang}
@@ -27,4 +29,9 @@ export let receive_message = (message) => {
     return {type: RECEIVE_MESSAGE,message}
 }
 
-
+export let check = () => {
+    return {type: CHECK}
+}
+export let checked = (status) => {
+    return {type: CHECKTED, status}
+}
