@@ -2,16 +2,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import QuoteRow from './quote_row'
-import {post_message, check} from '../actions/index'
+import {post_message} from '../actions/index'
 
 class quote extends React.Component{
   constructor(props) {
     super(props)
     this.state = {
-      items: 
-      [
-        {amount:0}
-      ],
+      rows: [],
       category: [],
       summary: 0.00
     }
@@ -36,7 +33,11 @@ class quote extends React.Component{
     }
     switch(nextProps.ws.type){
       case 'json-response':
-        this.setState({category: nextProps.ws.data.category})
+        let category = nextProps.ws.data.category
+        this.setState({
+          category: category,
+          rows: [this.new_row(category.length)]
+        })
         break
       case 'print-response':
         let url = window.URL.createObjectURL(new Blob([
@@ -56,16 +57,26 @@ class quote extends React.Component{
     }
   }
 
+  new_row(length){
+    return { 
+      items: Array.apply(null,{length: length}).map(() => ({price : 0, item_name : ''})),
+      quatity: 1,
+      amount: 0
+    }
+  }
+
   render() {
     let lang = this.props.lang.keys
     let titles = this.state.category.map((c,i)=>c[lang.item_name])
-    let items = this.state.items
+    let rows = this.state.rows
     return (
       <div className='quote'>
         <div></div>
         <div className='row header'>
           <div className='add' onClick={e=>{
-            this.setState({items: [...items, {}]})
+            this.setState({
+              rows: [...rows, this.new_row(this.state.category.length)]
+            })
           }}/>
           <input className='new-todo' placeholder={lang.what}/>
           {/*
@@ -89,13 +100,11 @@ class quote extends React.Component{
           }}>test</button>
           */}
           <div className='print' onClick={e=>{
-            //var aaa = this.state.items.map(c=>[...c.items.map(e=>e.item_name), c.quatity + '', c.amount])
-            //var bbb = []
-            //titles.map(c=>bbb.push({title:c,width:70}))
-            //bbb.push({title:lang.quatity,width:70})
-            //bbb.push({title:lang.amount,width:70})
-            this.props.dispatch(check())
-            debugger
+            console.log(this.state.rows)
+            let a = this.state.rows.filter(c => c.items.filter(d=>d.item_name === '').length === 0)
+            console.log(a.length)
+
+            // debugger
             // this.props.dispatch(post_message({type:'print-request',data:'print'}))
           }}/>
         </div>
@@ -108,15 +117,15 @@ class quote extends React.Component{
           <div className='amount'>{lang.amount}</div>
           </li>
           {
-            items.map((c,i)=>
+            rows.map((c,i)=>
               <QuoteRow key={i} category={this.state.category} 
                 onChange={value=>{
-                  items[i] = value
-                  this.setState({items: items})
+                  rows[i] = value
+                  this.setState({rows: rows})
                 }}
                 remove={e=>{
-                  items.splice(i,1)
-                  this.setState({items: items})
+                  rows.splice(i,1)
+                  this.setState({rows: rows})
                 }}
               />
             )
@@ -124,7 +133,7 @@ class quote extends React.Component{
         </ul></section>
         <div className='footer'>
           <div>{
-            parseFloat(Math.round(items
+            parseFloat(Math.round(rows
             .map((c,i)=>!!!c.amount ? 0 : parseFloat(c.amount))
             .reduce((p,c) => p + c, 0) * 100) / 100).toFixed(2)
           }</div>
