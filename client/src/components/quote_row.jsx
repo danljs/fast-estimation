@@ -13,22 +13,13 @@ class quote_row extends React.Component{
     }
   }
 
-  componentWillMount() {
-  }
+  componentWillMount() {}
 
-  componentWillReceiveProps (nextProps){
-    // if(this.state.items.length === 0 && nextProps.category.length > 0){
-    //   let items = Array.apply(null,{length: nextProps.category.length}).map(() => ({price : 0, item_name : ''}))
-    //   this.setState({
-    //     items : items
-    //   })
-    // }
-  }
+  componentWillReceiveProps(nextProps) {}
 
-  componentDidMount(){
-  }
+  componentDidMount() {}
 
-  update_row(items, quatity){
+  update_row(items, quatity) {
     let row = {
       items: items,
       quatity: quatity,
@@ -42,12 +33,13 @@ class quote_row extends React.Component{
 
   render() {
     let lang = this.props.lang.keys
+    console.log(this.props.value)
     return (
       <li className='row'>
       {
         this.props.category.map((c,i)=>
           <div key={i} className={'item' + i}>
-            <QuoteCell subs={c.sub} change={e=>{
+            <QuoteCell subs={c.sub} value={this.props.value.items[i]} change={e=>{
               let items = this.state.items
               items[i] = e
               this.update_row(items, this.state.quatity)

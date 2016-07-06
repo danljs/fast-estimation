@@ -100,8 +100,8 @@ class quote extends React.Component{
           }}>test</button>
           */}
           <div className='print' onClick={e=>{
-            console.log(this.state.rows)
-            let a = this.state.rows.filter(c => c.items.filter(d=>d.item_name === '').length === 0)
+            console.log(rows)
+            let a = rows.filter(c => c.items.filter(d=>d.item_name === '').length === 0)
             console.log(a.length)
 
             // debugger
@@ -118,7 +118,9 @@ class quote extends React.Component{
           </li>
           {
             rows.map((c,i)=>
-              <QuoteRow key={i} category={this.state.category} 
+              <QuoteRow key={i} 
+                value={c}
+                category={this.state.category} 
                 onChange={value=>{
                   rows[i] = value
                   this.setState({rows: rows})

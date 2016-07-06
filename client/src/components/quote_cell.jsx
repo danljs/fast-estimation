@@ -13,16 +13,17 @@ class quote_cell extends React.Component{
   render() {
     var lang = this.props.lang.keys
     var subs = this.props.subs
+    var value = !!!this.props.value ?  '0:' : this.props.value.price + ':' + this.props.value.item_name
     //multi select:
     //http://jsfiddle.net/chirayu45/yxkut/16/
-    
+    console.log(this.props.value)
     return (
-      <select className={!!!this.state.value?'error':''} defaultValue='' onChange={e=>{
+      <select className={!!!this.state.value?'error':''} value={value} onChange={e=>{
         let value = e.target.value.split(':')
         this.setState({value : value})
         this.props.change({price : value[0], item_name : value[1]})
       }}>
-        <option value='' disabled='disabled'></option>
+        <option value={'0:'} disabled='disabled'></option>
         {
           subs.map((c,i)=>
             !!!c.sub ?
